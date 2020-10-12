@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-buildopscodingquiz-dev-173646-authRole",
+      "UnauthRoleArn": "arn:aws:iam::314564690755:role/amplify-buildopscodingquiz-dev-173646-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::314564690755:role/amplify-buildopscodingquiz-dev-173646-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-buildopscodingquiz-dev-173646-deployment",
+      "UnauthRoleName": "amplify-buildopscodingquiz-dev-173646-unauthRole",
+      "StackName": "amplify-buildopscodingquiz-dev-173646",
+      "StackId": "arn:aws:cloudformation:us-east-1:314564690755:stack/amplify-buildopscodingquiz-dev-173646/1af21180-0af1-11eb-ad99-12695902b27f",
+      "AmplifyAppId": "d35rug981i5jix"
+    }
+  }
+}
