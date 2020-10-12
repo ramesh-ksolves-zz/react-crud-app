@@ -1,8 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-// import Header from './components/Header'
-import ListEmployee from './components/ListEmployee'
-import Employee from './components/Employee'
+import ListEmployee from './pages/ListEmployee'
+import Employee from './pages/Employee'
 import Sidebar from './components/Sidebar';
 import './App.css';
 import Dashboard from './pages/Dashboard';
@@ -10,8 +9,6 @@ import Dashboard from './pages/Dashboard';
 function App() {
   return (
     <div>
-      {/* <Header/> */}
-      
       <Router>
         <Sidebar />
         <Switch>

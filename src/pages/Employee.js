@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { getEmployee } from '../graphql/queries'
 import { createEmployee, updateEmployee, createSkill, deleteSkill } from '../graphql/mutations'
 import { useParams } from 'react-router-dom'
-import Button from './Button'
-import FormInput from './FormInput'
+import Button from '../components/Button'
+import FormInput from '../components/FormInput'
 import { FormControl, FormHelperText, Input, InputLabel, makeStyles, MenuItem, Select, Typography } from '@material-ui/core'
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
-import Loader from './Loader'
+import Loader from '../components/Loader'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -55,19 +55,19 @@ const Employee = (props) => {
         lastname: ""
     }
 
-    const [formLabel, setFormLabel] = useState("Add New Employee")
+    const [formLabel, setFormLabel] = useState("Add New Employee");
     const [errors, setErrors] = useState({});
-    const [employee, setEmployee] = useState(initialStateEmp)
+    const [employee, setEmployee] = useState(initialStateEmp);
     const [skills, setSkills] = useState([initialSkills]);
     const [prevSkills, setPrevSkills] = useState([]);
-    const [touched, setTouched] = useState(false)
+    const [touched, setTouched] = useState(false);
     const [selectedSkills, setSelectedSkills] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const skillChangeHandler = (event) => {
-        const arrSkillsObj = []
+        const arrSkillsObj = [];
         event.target.value.forEach(element => {
-            arrSkillsObj.push({ name: element })
+            arrSkillsObj.push({ name: element });
         });
         setSelectedSkills(event.target.value);
         setSkills(arrSkillsObj);
@@ -76,21 +76,21 @@ const Employee = (props) => {
     };
 
     const handleChange = (event) => {
-        const { name, value } = event.target
-        setEmployee({ ...employee, [name]: value })
+        const { name, value } = event.target;
+        setEmployee({ ...employee, [name]: value });
     }
 
     const backToListPage = () => {
-        props.history.push('/employees')
+        props.history.push('/employees');
     }
 
     useEffect(() => {
         if (empId) {
-            setFormLabel("Update Employee Details")
-            setIsLoading(true)
-            getEmpDetails()
+            setFormLabel("Update Employee Details");
+            setIsLoading(true);
+            getEmpDetails();
         } else {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     }, [])
 
@@ -98,7 +98,7 @@ const Employee = (props) => {
         try {
             const arrSkills = [];
 
-            const empoyeeDeatils = await API.graphql(graphqlOperation(getEmployee, { id: empId }))
+            const empoyeeDeatils = await API.graphql(graphqlOperation(getEmployee, { id: empId }));
             setEmployee(empoyeeDeatils.data.getEmployee);
 
             empoyeeDeatils.data.getEmployee.skills.items.forEach(element => {
@@ -106,11 +106,11 @@ const Employee = (props) => {
             });
 
             setSelectedSkills(arrSkills);
-            setSkills(empoyeeDeatils.data.getEmployee.skills)
+            setSkills(empoyeeDeatils.data.getEmployee.skills);
             setPrevSkills(empoyeeDeatils.data.getEmployee.skills);
             setIsLoading(false);
         } catch (err) {
-            console.log('error fetching emp data')
+            console.log('error fetching emp data');
         }
     }
     const validateAllFields = (event) => {
@@ -118,26 +118,26 @@ const Employee = (props) => {
         let err = {};
         let errCount = 0;
         if (!employee.firstname) {
-            err.firstname = "Enter first name"
+            err.firstname = "Enter first name";
             errCount++;
         }
         if (employee.firstname && employee.firstname.length > 30) {
-            err.firstname = "First name must be less that 30 characters"
+            err.firstname = "First name must be less that 30 characters";
             errCount++;
         }
 
         if (!employee.lastname) {
-            err.lastname = "Enter last name"
+            err.lastname = "Enter last name";
             errCount++;
         }
 
         if (employee.lastname && employee.lastname.length > 30) {
-            err.lastname = "Last name must be less that 30 characters"
+            err.lastname = "Last name must be less that 30 characters";
             errCount++;
         }
 
         if (selectedSkills.length === 0) {
-            err.skills = "Please select atleast one skill"
+            err.skills = "Please select atleast one skill";
             errCount++;
         }
 
@@ -150,34 +150,36 @@ const Employee = (props) => {
     async function saveEmployee(event) {
         try {
             let res;
+            setIsLoading(true);
             if (empId) {
                 employee.id = empId;
                 delete employee.skills;
                 res = await API.graphql(graphqlOperation(updateEmployee, { input: employee }))
                 if (touched) {
                     // Delete old skills
-                    prevSkills.items.forEach(async element => {
-                        res = await API.graphql(graphqlOperation(deleteSkill, { input: { id: element.id } }))
-                    });
+                    for (const prevSkill of prevSkills.items) {
+                        res = await API.graphql(graphqlOperation(deleteSkill, { input: { id: prevSkill.id } }));
+                    }
                     //Insert new skill
-                    skills.forEach(async element => {
-                        element.empID = empId
-                        res = await API.graphql(graphqlOperation(createSkill, { input: element }))
-                    });
+                    for (const skill of skills) {
+                        skill.empID = empId;
+                        res = await API.graphql(graphqlOperation(createSkill, { input: skill }));
+                    }
                 }
 
             } else {
                 res = await API.graphql(graphqlOperation(createEmployee, { input: employee }))
                 if (res.data.createEmployee.id) {
                     skills.forEach(async element => {
-                        element.empID = res.data.createEmployee.id
-                        res = await API.graphql(graphqlOperation(createSkill, { input: element }))
+                        element.empID = res.data.createEmployee.id;
+                        res = await API.graphql(graphqlOperation(createSkill, { input: element }));
                     });
 
                 }
             }
+            setIsLoading(false);
             if (!res.data.errors) {
-                props.history.push("/employees")
+                props.history.push("/employees");
             }
 
         } catch (err) {
@@ -186,11 +188,11 @@ const Employee = (props) => {
     }
     return (
         <div className='wrapper'>
+            {(isLoading) ? <Loader /> : null}
             <div className='form-wrapper'>
                 <form>
                     <FormControl className={classes.formControl}>
                         <Typography variant="h5" align="center">{formLabel}</Typography>
-                        {(isLoading) ? <Loader /> : null}
                     </FormControl>
                     <FormControl className={classes.formControl}>
                         <FormInput

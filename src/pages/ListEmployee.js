@@ -12,12 +12,12 @@ import { listEmployees } from '../graphql/queries'
 import { deleteEmployee } from '../graphql/mutations'
 import { Link, Route } from 'react-router-dom';
 import { Grid, IconButton, makeStyles, Paper, TableContainer } from '@material-ui/core';
-import ConfirmDialog from './ConfirmDialog';
+import ConfirmDialog from '../components/ConfirmDialog';
 import Button from '../components/Button'
 import { withApollo } from 'react-apollo';
 import { Mutation } from 'react-apollo'
 import gql from "graphql-tag"
-import Loader from './Loader';
+import Loader from '../components/Loader';
 
 const useStyles = makeStyles({
     table: {
@@ -35,18 +35,18 @@ const ListEmployee = (props) => {
     const [isconfirmDialogOpen, setIsconfirmDialogOpen] = useState(false);
     const [empDelId, setEmpDelId] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const hideLoader = () => { setIsLoading(false) }
-    const showLoader = () => { setIsLoading(true) }
+    const hideLoader = () => { setIsLoading(false) };
+    const showLoader = () => { setIsLoading(true) };
     const addNewEmployee = () => {
-        props.history.push("/employee/add")
+        props.history.push("/employee/add");
     }
     const setConfirmOpen = (val, id) => {
-        setIsconfirmDialogOpen(val)
-        setEmpDelId(id)
+        setIsconfirmDialogOpen(val);
+        setEmpDelId(id);
     }
 
     useEffect(() => {
-        fetchEmployeeList()
+        fetchEmployeeList();
     }, [])
 
 
@@ -79,8 +79,8 @@ const ListEmployee = (props) => {
                 variables: {}
             })
                 .then((res) => {
-                    setEmployees(res.data.listEmployees.items)
-                    hideLoader()
+                    setEmployees(res.data.listEmployees.items);
+                    hideLoader();
                 })
                 .catch(console.error);
         }
@@ -106,8 +106,8 @@ const ListEmployee = (props) => {
                 mutation
             })
                 .then((result) => {
-                    setEmployees(employees.filter(emp => emp.id !== id))
-                    setEmpDelId('')
+                    setEmployees(employees.filter(emp => emp.id !== id));
+                    setEmpDelId('');
                 })
                 .catch((error) => { console.log(error); });
         }
@@ -121,7 +121,7 @@ const ListEmployee = (props) => {
             <Typography variant="h4" align="center">Employee List</Typography>
             <Grid container justify="flex-end">
                 <Button
-                    type="secondary"
+                    type="primary"
                     label="Add Employee"
                     handleClick={() => addNewEmployee()}
                 />

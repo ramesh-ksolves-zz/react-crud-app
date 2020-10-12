@@ -18,21 +18,22 @@ const ConfirmDialog = (props) => {
       <DialogActions>
         <Button
           variant="contained"
-          onClick={() => setOpen(false)}
-          color="secondary"
-        >
-          No
-        </Button>
-        <Button
-          variant="contained"
           onClick={() => {
             setOpen(false);
             onConfirm();
           }}
-          color="default"
+          color="primary"
         >
           Yes
         </Button>
+        <Button
+          variant="contained"
+          onClick={() => setOpen(false)}
+          color="default"
+        >
+          No
+        </Button>
+
       </DialogActions>
     </Dialog>
   );
