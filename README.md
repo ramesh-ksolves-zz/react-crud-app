@@ -1,3 +1,20 @@
+# ReactJS Sample Application
+
+This is the basis ReactJS sample application demonstrating how can we perform basis CRUD operations & reusable components by making use for following stack
+- GraphQL
+- AWS DynamoDB
+- AWS Amplify
+- React Apollo
+- AWS AppSync
+
+# Prerequisites to setup and run application locally
+- Node.js v10.x or later
+- npm v5.x or later
+- git v2.14.1 or later
+
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
