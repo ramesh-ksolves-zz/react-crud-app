@@ -1,6 +1,6 @@
 # ReactJS Sample Application
 
-This is the basis ReactJS sample application demonstrating how can we perform basis CRUD operations & reusable components by making use for following stack
+This is the basis ReactJS sample application demonstrating how can we perform basic CRUD operations & reusable components by making use for following stack
 - GraphQL
 - AWS DynamoDB
 - AWS Amplify
@@ -17,7 +17,7 @@ This is the basis ReactJS sample application demonstrating how can we perform ba
 - Go to the directory `cd react-crud-app`
 - run `npm install` (This step wil install all dependencies)
 - run `npm start` 
-- Now you web app will start running from local
+- Now your web app will start running from local
 
 # Notes
 
