@@ -170,10 +170,11 @@ const Employee = (props) => {
             } else {
                 res = await API.graphql(graphqlOperation(createEmployee, { input: employee }))
                 if (res.data.createEmployee.id) {
-                    skills.forEach(async element => {
-                        element.empID = res.data.createEmployee.id;
-                        res = await API.graphql(graphqlOperation(createSkill, { input: element }));
-                    });
+                    const newEmpId = res.data.createEmployee.id;
+                    for (const skill of skills) {
+                        skill.empID = newEmpId;
+                        res = await API.graphql(graphqlOperation(createSkill, { input: skill }));
+                    }
 
                 }
             }
