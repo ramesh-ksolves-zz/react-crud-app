@@ -25,7 +25,7 @@ This is the basic ReactJS sample application demonstrating how can we perform ba
 `REACT_APP_APPSYNC_APIKEY=`
 
 # Update to file  aws-exports.js 
-Update file aws-exports.js with provided configuration details in  /src/aws-exports.js
+Update file `aws-exports.js` with provided configuration details in  /src/aws-exports.js
 
 # How to deploy and run application on local
 - Take pull of code from git hub
