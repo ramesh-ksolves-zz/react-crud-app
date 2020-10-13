@@ -12,14 +12,6 @@ This is the basic ReactJS sample application demonstrating how can we perform ba
 - npm v5.x or later
 - git v2.14.1 or later
 
-# How to deploy and run application on local
-- Take pull of code from git hub
-- Go to the directory `cd react-crud-app`
-- Update `.env`
-- Update `aws-exports.js`
-- run `npm install` (This step wil install all dependencies)
-- run `npm start` 
-- Now your web app will start running from local
 
 # Environment settings to be done in .env file in root location
 `REACT_APP_PROJECT_REGION=`
@@ -32,7 +24,17 @@ This is the basic ReactJS sample application demonstrating how can we perform ba
 
 `REACT_APP_APPSYNC_APIKEY=`
 
-# Add file aws-exports.js in /src of application if not exists with given configuration
+# Update to file  aws-exports.js 
+Update file aws-exports.js with provided configuration details in  /src/aws-exports.js
+
+# How to deploy and run application on local
+- Take pull of code from git hub
+- Go to the directory `cd react-crud-app`
+- Update `.env` as mentioned above
+- Update `aws-exports.js` as mentioned above
+- run `npm install` (This step wil install all dependencies)
+- run `npm start` 
+- Now your web app will start running from local
 
 # Notes
 
