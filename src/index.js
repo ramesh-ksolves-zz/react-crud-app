@@ -5,25 +5,23 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import Amplify from "aws-amplify";
 import awsExports from "./aws-exports";
-
-
-
 import { ApolloProvider } from '@apollo/react-hooks';
 import { ApolloLink } from 'apollo-link';
 import { createAuthLink } from 'aws-appsync-auth-link';
 import { createHttpLink } from 'apollo-link-http';
 import ApolloClient from 'apollo-client';
 import { InMemoryCache } from 'apollo-boost';
-import { Mutation } from 'react-apollo'
-import gql from "graphql-tag"
+import { Mutation } from 'react-apollo';
+import gql from "graphql-tag";
+import dotenv from 'dotenv';
 
 Amplify.configure(awsExports);
 
-const url = "https://5ys2fe6n7rc75mpkiufly5yzqe.appsync-api.us-east-1.amazonaws.com/graphql";
-const region = "us-east-1";
+const url = process.env.REACT_APP_APPSYNC_GRAPHQLENDPOINT;
+const region = process.env.REACT_APP_PROJECT_REGION;
 const auth = {
-  type: "API_KEY",
-  apiKey: "da2-zlo55nr3wfh5jppefmyjku5zji"
+  type: process.env.REACT_APP_APPSYNC_AUTHENTICATIONTYPE,
+  apiKey: process.env.REACT_APP_APPSYNC_APIKEY
 };
 const link = ApolloLink.from([
   createAuthLink({ url, region, auth }),
