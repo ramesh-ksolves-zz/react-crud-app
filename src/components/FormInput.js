@@ -3,49 +3,49 @@ import PropTypes from 'prop-types'
 import { TextField } from '@material-ui/core'
 
 const FormInput = ({
-    name,
-    type,
-    placeholder,
-    onChange,
-    className,
-    value,
-    error,
-    children,
-    label,
-    ...props
+  name,
+  type,
+  placeholder,
+  onChange,
+  className,
+  value,
+  error,
+  children,
+  label,
+  ...props
 }) => {
 
-    return (
-        <React.Fragment>
-            <label htmlFor={name}>{label} : </label>
-            <TextField
-                variant="outlined"
-                name={name}
-                type={type}
-                placeholder={placeholder}
-                onChange={onChange}
-                value={value}
-                className={className}
-                style={error && { border: 'solid 1px red' }}
-            />
-            { error && <p style={error && { color: 'red' }}>{error}</p>}
-        </React.Fragment>
-    )
+  return (
+    <React.Fragment>
+      <label htmlFor={name}>{label} : </label>
+      <TextField
+        variant="outlined"
+        name={name}
+        type={type}
+        placeholder={placeholder}
+        onChange={onChange}
+        value={value}
+        className={className}
+        style={error && { border: 'solid 1px red' }}
+      />
+      { error && <p style={error && { color: 'red' }}>{error}</p>}
+    </React.Fragment>
+  )
 }
 
 FormInput.defaultProps = {
-    type: "text",
-    className: ""
+  type: "text",
+  className: ""
 }
 
 FormInput.propTypes = {
-    name: PropTypes.string.isRequired,
-    // type: PropTypes.string,
-    placeholder: PropTypes.string.isRequired,
-    type: PropTypes.oneOf(['text']),
-    className: PropTypes.string,
-    value: PropTypes.any,
-    onChange: PropTypes.func.isRequired
+  name: PropTypes.string.isRequired,
+  // type: PropTypes.string,
+  placeholder: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(['text']),
+  className: PropTypes.string,
+  value: PropTypes.any,
+  onChange: PropTypes.func.isRequired
 }
 
 export default FormInput

@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Sidebar = (props) => {
+const Sidebar = () => {
   const classes = useStyles();
   const history = useHistory();
   const handleClick = (path) => history.push(path);
@@ -73,13 +73,13 @@ const Sidebar = (props) => {
             <IconButton>
               <HomeIcon />
             </IconButton>
-            <ListItemText primary="Home"/>
+            <ListItemText primary="Home" />
           </ListItem>
           <ListItem button onClick={() => handleClick('/employees')}>
             <IconButton>
               <PersonIcon />
             </IconButton>
-            <ListItemText primary="Employees"/>
+            <ListItemText primary="Employees" />
           </ListItem>
         </List>
 

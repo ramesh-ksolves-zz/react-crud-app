@@ -20,44 +20,80 @@ import gql from "graphql-tag"
 import Loader from '../components/Loader';
 
 const useStyles = makeStyles({
-    table: {
-        minWidth: 650,
-    },
-    tableHeader: {
-        backgroundColor: '#f2f2f2',
-        fontWeight: 'bold'
-    }
+  table: {
+    minWidth: 650,
+  },
+  tableHeader: {
+    backgroundColor: '#f2f2f2',
+    fontWeight: 'bold'
+  }
 });
 
 const ListEmployee = (props) => {
-    const classes = useStyles();
-    const [employees, setEmployees] = useState([]);
-    const [isconfirmDialogOpen, setIsconfirmDialogOpen] = useState(false);
-    const [empDelId, setEmpDelId] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const hideLoader = () => { setIsLoading(false) };
-    const showLoader = () => { setIsLoading(true) };
-    const addNewEmployee = () => {
-        props.history.push("/employee/add");
-    }
-    const setConfirmOpen = (val, id) => {
-        setIsconfirmDialogOpen(val);
-        setEmpDelId(id);
-    }
+  const classes = useStyles();
+  const [employees, setEmployees] = useState([]);
+  const [isconfirmDialogOpen, setIsconfirmDialogOpen] = useState(false);
+  const [empDelId, setEmpDelId] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const hideLoader = () => { setIsLoading(false) };
+  const showLoader = () => { setIsLoading(true) };
+  const addNewEmployee = () => {
+    props.history.push("/employee/add");
+  }
+  const setConfirmOpen = (val, id) => {
+    setIsconfirmDialogOpen(val);
+    setEmpDelId(id);
+  }
 
-    useEffect(() => {
-        fetchEmployeeList();
-    }, [])
+  useEffect(() => {
+    fetchEmployeeList();
+  }, [])
 
+  const tableBody = (employees) => {
+    return (
+      <>
+        {employees.map((emp, index) => (
+          <TableRow key={emp.id}>
+            <TableCell component="th" scope="row">
+              {index + 1}
+            </TableCell>
+            <TableCell align="left">{emp.firstname}</TableCell>
+            <TableCell align="left">{emp.lastname}</TableCell>
+            <TableCell align="left">
+              {
+                emp.skills.items.map((skill) => (skill.name)).join(', ')
+              }
+            </TableCell>
+            <TableCell align="center" >
+              <IconButton>
+                <Link to={`/employee/${emp.id}`}><CreateIcon /></Link>
+              </IconButton>
+              <IconButton aria-label="delete" onClick={() => setConfirmOpen(true, emp.id)}>
+                <DeleteIcon />
+              </IconButton>
+              <ConfirmDialog
+                title="Delete Employee?"
+                open={isconfirmDialogOpen}
+                setOpen={setConfirmOpen}
+                onConfirm={() => removeEmployee(empDelId)}
+              >
+                Are you sure you want to delete this employee?
+              </ConfirmDialog>
+            </TableCell>
+          </TableRow>
+        ))}
+      </>
+    )
+  }
 
-    async function fetchEmployeeList() {
-        try {
-            // const employeeList = await API.graphql(graphqlOperation(listEmployees))
-            // setEmployees(employeeList.data.listEmployees.items);
+  const fetchEmployeeList = () => {
+    try {
+      // const employeeList = await API.graphql(graphqlOperation(listEmployees))
+      // setEmployees(employeeList.data.listEmployees.items);
 
-            //Followed approach of React Apollo GraphQL query as   though above approach is simple one with aws appsync
-            showLoader();
-            const EMPLOYEE_LIST = gql`
+      //Followed approach of React Apollo GraphQL query as   though above approach is simple one with aws appsync
+      showLoader();
+      const EMPLOYEE_LIST = gql`
                 {
                   listEmployees {
                       items {
@@ -73,108 +109,79 @@ const ListEmployee = (props) => {
                   }
                }`;
 
-            return props.client.query({
-                query: EMPLOYEE_LIST,
-                fetchPolicy: 'network-only',
-                variables: {}
-            })
-                .then((res) => {
-                    setEmployees(res.data.listEmployees.items);
-                    hideLoader();
-                })
-                .catch(console.error);
-        }
-        catch (err) {
-            console.log('error fetching data...');
-        }
+      return props.client.query({
+        query: EMPLOYEE_LIST,
+        fetchPolicy: 'network-only',
+        variables: {}
+      })
+        .then((res) => {
+          setEmployees(res.data.listEmployees.items);
+          hideLoader();
+        })
+        .catch(console.error);
     }
-    async function removeEmployee(id) {
-        try {
-            // await API.graphql(graphqlOperation(deleteEmployee, { input: { id: id } }))
-            // .then(setEmployees(employees.filter(emp => emp.id !== id)))
-            // setEmpDelId('')
+    catch (err) {
+      console.log('error fetching data...');
+    }
+  }
 
-            //Followed approach of React Apollo GraphQL query as   though above approach is simple one with aws appsync
-            const mutation = gql`
+  const removeEmployee = (id) => {
+    try {
+      // await API.graphql(graphqlOperation(deleteEmployee, { input: { id: id } }))
+      // .then(setEmployees(employees.filter(emp => emp.id !== id)))
+      // setEmpDelId('')
+
+      //Followed approach of React Apollo GraphQL query as   though above approach is simple one with aws appsync
+      const mutation = gql`
             mutation DeleteEmployee($input: DeleteEmployeeInput!) {
                 deleteEmployee(input: $input) {
                     id
                 }
             }`;
-            return props.client.mutate({
-                variables: { input: { id: id } },
-                mutation
-            })
-                .then((result) => {
-                    setEmployees(employees.filter(emp => emp.id !== id));
-                    setEmpDelId('');
-                })
-                .catch((error) => { console.log(error); });
-        }
-        catch (err) {
-            console.log('error removing employee...');
-        }
+      return props.client.mutate({
+        variables: { input: { id: id } },
+        mutation
+      })
+        .then((result) => {
+          setEmployees(employees.filter(emp => emp.id !== id));
+          setEmpDelId('');
+        })
+        .catch((error) => { console.log(error); });
     }
-    
-    return (
-        <div className='wrapper'>
-            <Typography variant="h4" align="center">Employee List</Typography>
-            <Grid container justify="flex-end">
-                <Button
-                    type="primary"
-                    label="Add Employee"
-                    handleClick={() => addNewEmployee()}
-                />
-            </Grid>
-            <TableContainer component={Paper}>
-                <Table className={classes.table} size="small" aria-label="a dense table">
-                    <TableHead >
-                        <TableRow className={classes.tableHeader}>
-                            <TableCell className={classes.tableHeader}>#ID</TableCell>
-                            <TableCell align="left" className={classes.tableHeader}>First Name</TableCell>
-                            <TableCell align="left" className={classes.tableHeader}>Last Name</TableCell>
-                            <TableCell align="left" className={classes.tableHeader}>Skills</TableCell>
-                            <TableCell align="center" colSpan="2" className={classes.tableHeader}>Action</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {employees.map((emp, index) => (
-                            <TableRow key={emp.id}>
-                                <TableCell component="th" scope="row">
-                                    {index + 1}
-                                </TableCell>
-                                <TableCell align="left">{emp.firstname}</TableCell>
-                                <TableCell align="left">{emp.lastname}</TableCell>
-                                <TableCell align="left">
-                                    {
-                                        emp.skills.items.map((skill) => (skill.name)).join(', ')
-                                    }
-                                </TableCell>
-                                <TableCell align="center" >
-                                    <IconButton>
-                                        <Link to={`/employee/${emp.id}`}><CreateIcon /></Link>
-                                    </IconButton>
-                                    <IconButton aria-label="delete" onClick={() => setConfirmOpen(true, emp.id)}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                    <ConfirmDialog
-                                        title="Delete Employee?"
-                                        open={isconfirmDialogOpen}
-                                        setOpen={setConfirmOpen}
-                                        onConfirm={() => removeEmployee(empDelId)}
-                                    >
-                                        Are you sure you want to delete this employee?
-                                </ConfirmDialog>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            {(isLoading) ? <Loader /> : null}
+    catch (err) {
+      console.log('error removing employee...');
+    }
+  }
 
-        </div>
-    )
+  return (
+    <div className='wrapper'>
+      <Typography variant="h4" align="center">Employee List</Typography>
+      <Grid container justify="flex-end">
+        <Button
+          type="primary"
+          label="Add Employee"
+          handleClick={() => addNewEmployee()}
+        />
+      </Grid>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} size="small" aria-label="a dense table">
+          <TableHead >
+            <TableRow className={classes.tableHeader}>
+              <TableCell className={classes.tableHeader}>#ID</TableCell>
+              <TableCell align="left" className={classes.tableHeader}>First Name</TableCell>
+              <TableCell align="left" className={classes.tableHeader}>Last Name</TableCell>
+              <TableCell align="left" className={classes.tableHeader}>Skills</TableCell>
+              <TableCell align="center" colSpan="2" className={classes.tableHeader}>Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+              {tableBody(employees)}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {(isLoading) ? <Loader /> : null}
+    </div>
+  )
 }
 
 export default withApollo(ListEmployee)
