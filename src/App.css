@@ -129,10 +129,12 @@ input.error {
 
 .button.primary {
  background-color: #0886ff;
+ min-width: 80px;
 }
 
 .button.secondary {
- background-color: #c9ccc2;
+ background-color: grey;
+ min-width: 80px;
 }
 
 .loader-text {

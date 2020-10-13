@@ -69,17 +69,17 @@ const Sidebar = (props) => {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          <ListItem button  >
+          <ListItem button onClick={() => handleClick('/')} >
             <IconButton>
               <HomeIcon />
             </IconButton>
-            <ListItemText primary="Home" onClick={() => handleClick('/')} />
+            <ListItemText primary="Home"/>
           </ListItem>
-          <ListItem button >
+          <ListItem button onClick={() => handleClick('/employees')}>
             <IconButton>
               <PersonIcon />
             </IconButton>
-            <ListItemText primary="Employees" onClick={() => handleClick('/employees')} />
+            <ListItemText primary="Employees"/>
           </ListItem>
         </List>
 

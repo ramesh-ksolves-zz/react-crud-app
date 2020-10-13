@@ -1,10 +1,9 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import Button from './Button'
 const ConfirmDialog = (props) => {
   const { title, children, open, setOpen, onConfirm } = props;
   return (
@@ -17,23 +16,18 @@ const ConfirmDialog = (props) => {
       <DialogContent>{children}</DialogContent>
       <DialogActions>
         <Button
-          variant="contained"
-          onClick={() => {
-            setOpen(false);
-            onConfirm();
-          }}
-          color="primary"
-        >
-          Yes
-        </Button>
+            type="primary"
+            label="Yes"
+            handleClick={() => {
+              setOpen(false);
+              onConfirm();
+            }}
+        />
         <Button
-          variant="contained"
-          onClick={() => setOpen(false)}
-          color="default"
-        >
-          No
-        </Button>
-
+            type="secondary"
+            label="No"
+            handleClick={() => setOpen(false)}
+        />
       </DialogActions>
     </Dialog>
   );
