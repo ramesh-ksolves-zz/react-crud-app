@@ -9,6 +9,7 @@ import { FormControl, FormHelperText, Input, InputLabel, makeStyles, MenuItem, S
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import Loader from '../components/Loader'
+import NotFound from './NotFound'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -62,6 +63,7 @@ const Employee = (props) => {
   const [touched, setTouched] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [noData, setNoData] = useState("");
 
   const skillChangeHandler = (event) => {
     const arrSkillsObj = [];
@@ -97,15 +99,21 @@ const Employee = (props) => {
     try {
       const arrSkills = [];
       const empoyeeDeatils = await API.graphql(graphqlOperation(getEmployee, { id: empId }));
-      setEmployee(empoyeeDeatils.data.getEmployee);
-      empoyeeDeatils.data.getEmployee.skills.items.forEach(element => {
-        arrSkills.push(element.name);
-      });
-      setSelectedSkills(arrSkills);
-      setSkills(empoyeeDeatils.data.getEmployee.skills);
-      setPrevSkills(empoyeeDeatils.data.getEmployee.skills);
-      setIsLoading(false);
+      if(empoyeeDeatils && empoyeeDeatils.data.getEmployee) {
+        setEmployee(empoyeeDeatils.data.getEmployee);
+        empoyeeDeatils.data.getEmployee.skills.items.forEach(element => {
+          arrSkills.push(element.name);
+        });
+        setSelectedSkills(arrSkills);
+        setSkills(empoyeeDeatils.data.getEmployee.skills);
+        setPrevSkills(empoyeeDeatils.data.getEmployee.skills);
+        setIsLoading(false);
+      } else {
+        setNoData("No data found for this id !!")
+        setIsLoading(false);
+      }
     } catch (err) {
+      setIsLoading(false);
       console.log('error fetching emp data');
     }
   }
@@ -186,7 +194,13 @@ const Employee = (props) => {
   return (
     <div className='wrapper'>
       {(isLoading) ? <Loader /> : null}
-      <div className='form-wrapper'>
+      {
+        (noData) && (<NotFound message={noData} />) 
+      }
+      {
+        (!noData) &&  
+        (
+        <div className='form-wrapper'>
         <form>
           <FormControl className={classes.formControl}>
             <Typography variant="h5" align="center">{formLabel}</Typography>
@@ -251,7 +265,10 @@ const Employee = (props) => {
           </FormControl>
         </form>
       </div>
+      )
+    }
     </div>
+        
   )
 }
 

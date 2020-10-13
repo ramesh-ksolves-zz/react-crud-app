@@ -13,7 +13,6 @@ function Routes() {
                 <Route exact path="/employee" component={ListEmployee} />
                 <Route exact path="/employee/add" component={Employee} />
                 <Route exact path="/employee/:empId" component={Employee} />
-                <Route component={NotFound}/>
             </Switch>
         </BrowserRouter>
     )
